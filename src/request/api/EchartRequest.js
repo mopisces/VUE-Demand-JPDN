@@ -11,7 +11,7 @@ const echartRequest = {
 	cusEchartData( data ){
 		var params = new URLSearchParams()
 		params.append('data',encrypt.strEncrpt(data.join('*')))
-		return axios.post(`${base.domain}backStage/Rsa`,params)
+		return axios.post(`${base.domain}backStage/echartData`,params)
 	}
 }
 export default echartRequest
