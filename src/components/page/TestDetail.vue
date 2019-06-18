@@ -93,7 +93,6 @@
 		    			let array = JSON.parse( sessionStorage.getItem( 'testList' ) )
 		    			array.splice(store.state.test.deleteIndex,1)
 		    			sessionStorage.setItem('testList',JSON.stringify(array))
-		    			store.commit('setUserInfoBadge','/test')
 		    			this.setToast('数据提交成功','success')
 		    			setTimeout(()=>{
 			              this.$router.push('/common/operate')

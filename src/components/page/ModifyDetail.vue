@@ -107,7 +107,6 @@
 						let array = JSON.parse( sessionStorage.getItem( 'modList' ) )
 						array.splice(store.state.mod.deleteIndex,1)
 						sessionStorage.setItem('modList',JSON.stringify(array))
-						store.commit('setUserInfoBadge','/mod')
 						this.setToast('数据提交成功','success')
 						setTimeout(()=>{
 			              this.$router.push('/common/operate')
