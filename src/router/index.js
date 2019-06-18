@@ -19,8 +19,6 @@ const failure = r => require.ensure([], () => r(require('@/components/common/404
 const limit =  r => require.ensure([], () => r(require('@/components/common/403')), 'limit')
 const customer = r => require.ensure([], () => r(require('@/components/common/Customer')), 'customer')
 
-const test = r => require.ensure([], () => r(require('@/components/common/Test')), 'test')
-
 Vue.use(Router)
 
 export const asyncRouterMap = [
@@ -86,16 +84,6 @@ export const asyncRouterMap = [
 
 
 let routes = [
-    {
-        path:'/common',
-        component:common,
-        children:[
-            {
-                path:'echart',
-                component:newEchart
-            }
-        ]
-    },
 	{
 		path:'/customer',
 		name:'customer',
