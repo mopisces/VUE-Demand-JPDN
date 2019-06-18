@@ -1,4 +1,8 @@
 import { asyncRouterMap } from '@/router/index'
+/**
+ * [actions 根据权限获取权限路由]
+ * @type {Object}
+ */
 const actions = {
 	permission: ({commit}, role) => { 
 		let routeArr = deepCopy(asyncRouterMap) 
@@ -6,7 +10,12 @@ const actions = {
 		commit('setNavList', navList)
 	}
 }
-// 根据权限 筛选路由
+/**
+ * [filterAsyncRouter 根据权限过滤并存储权限路由]
+ * @param  {[array]} asyncRouterMap [权限路由]
+ * @param  {[mix]} roles          [权限名称]
+ * @return {[array]}                [有权限的路由集合]
+ */
 function filterAsyncRouter (asyncRouterMap, roles) {
 	const accessedRouters = asyncRouterMap.filter( route => {
 		if( typeof(roles) === 'object'){
@@ -24,8 +33,13 @@ function filterAsyncRouter (asyncRouterMap, roles) {
 			}
 		}
 	})
-		return accessedRouters
-	}
+	return accessedRouters
+}
+/**
+ * [deepCopy 深度拷贝]
+ * @param  {[array]} routeArr [要拷贝的数据]
+ * @return {[array]}    arr      [拷贝完成的数据]
+ */
 function deepCopy (routeArr) {
 	return routeArr.map((arr) => {
 		arr = Object.assign({}, arr)
