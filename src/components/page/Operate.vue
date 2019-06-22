@@ -59,26 +59,19 @@
 	  	created () {
 	  		store.commit('setTitle','操作首页')
 	  		this.getAuthUrl()
+	  		//console.dir(JSON.parse(sessionStorage.getItem('cusNameSearchList')))
 	  	},
 	  	methods:{
 	  		pushUrl(url){
 	  			this.$router.push(url)
 	  		},
 	  		getAuthUrl(){
-	  			let self = this
-	  			/*if( JSON.stringify(store.state.authUrl) != "{}"){
-	  				self.gridItem = store.state.authUrl
-	  				return 
-	  			}*/
 	  			this.$api.homeRequest.getAuthUrl().then((res)=>{
 		  			if(res.data.code == 200 ){
-		  				self.gridItem = res.data.list
+		  				this.gridItem = res.data.list
 						store.commit('setAuthUrl',res.data.list)
 		  			}
 	  			})
-	  		},
-	  		setTittle(){
-	  			this.$emit('setTittle','操作首页')
 	  		}
 	  	}
 	}

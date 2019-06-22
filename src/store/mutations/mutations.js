@@ -1,3 +1,4 @@
+import startDate from '@/util/StartDate'
 const mutations = {
 	/**
 	 * [userLogin 设置用户端信息]
@@ -45,7 +46,8 @@ const mutations = {
 	 * @param {[object]} filterData [过滤条件]
 	 */
 	setFilterData(state,filterData){
-		state.filterData = Object.assign({},state.filterData,filterData)
+		let data = Object.assign({},state.filterData,filterData)
+		state.filterData = data
 	},
 	/**
 	 * [setCustomerList 存储客户列表]
@@ -77,7 +79,7 @@ const mutations = {
 	 * @param {[object]} analystsData [对应index及ID]
 	 */
 	setAnalysts (state,analystsData) {
-		state.analysts = Object.assign({},state.analysts,analystsData)
+		state.analystsDetail.jumpDetail = Object.assign({},analystsData)
 	},
 	/**
 	 * [setMod 修改页面跳转时记录对应index及ID]
@@ -85,7 +87,7 @@ const mutations = {
 	 * @param {[object]} modData [对应index及ID]
 	 */
 	setMod (state,modData){
-		state.mod = Object.assign({},state.mod,modData)
+		state.modifyDetail.jumpDetail = Object.assign({},modData)
 	},
 	/**
 	 * [setTest 测试页面跳转时记录对应index及ID]]
@@ -93,7 +95,7 @@ const mutations = {
 	 * @param {[object]} testData [对应index及ID]
 	 */
 	setTest (state,testData){
-		state.test = Object.assign({},state.test,testData)
+		state.testDetail.jumpDetail = Object.assign({},testData)
 	},
 	/**
 	 * [setLoginStatus 设置登录状态]
@@ -111,6 +113,34 @@ const mutations = {
 	setNavList (state, navList) {
 		state.navList = navList
 	},
+	/**
+	 * [setCurPage 设置当前页]
+	 * @param {[vuex.state]} state [vuex.state对象]
+	 * @param {[number]} page  [当前页]
+	 */
+	setCurPage(state,page){
+		state.filterData.curPage = page
+	},
+	/**
+	 * [setEchartDetail 图表详细页过滤信息]
+	 * @param {[vuex.state]} state [vuex.state对象]
+	 * @param {[object]} detail [过滤条件]
+	 */
+	setEchartDetail(state,detail){
+		state.echartDetail = Object.assign({},state.echartDetail,detail)
+	},
 
+	setCusStatus(state,histogramShow){
+		state.echart.cusStatus.histogramShow = histogramShow
+	},
+	setTimeStatus(state,histogramShow){
+		state.echart.timeStatus.histogramShow = histogramShow
+	},
+	setDataViewStatus(state,index){
+		state.echart.dataViewStatus.tabViewIndex = index
+	},
+	/*setCancelStatus(state,status){
+		state.cancel.status = status
+	}*/	
 }
 export default mutations

@@ -28,11 +28,9 @@
 		},
 		data () {
 			return {
-				tabList:[{title:'按客户汇总数据',selected:true},{title:'按时间汇总数据',selected:false}],
-				tabView: 'CustomerEchart',
+				tabList:[],
+				tabView: '',
 			}
-		},
-		mounted (){
 		},
 		methods:{
 			onItemClick(index){
@@ -44,9 +42,20 @@
 					this.tabView = 'TimeEchart'
 					break
 				}
+			},
+			getCreateData(){
+				if(store.state.echart.dataViewStatus.tabViewIndex == '0'){
+					this.tabList = [{title:'按客户汇总数据',selected:true},{title:'按时间汇总数据',selected:false}]
+					this.tabView = 'CustomerEchart'
+				}
+				if(store.state.echart.dataViewStatus.tabViewIndex == '1'){
+					this.tabList = [{title:'按客户汇总数据',selected:false},{title:'按时间汇总数据',selected:true}]
+					this.tabView = 'TimeEchart'
+				}
 			}
 		},
 		created(){
+			this.getCreateData()
 			store.commit('setTitle','需求数据汇总')
 		}
 	}

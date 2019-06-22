@@ -3,7 +3,7 @@
         <x-header :left-options="{showBack: false}" title="后台管理系统"></x-header>
         <group title="管理员入口">
             <x-input title="用户名" v-model.trim="form.staffName" required></x-input>
-            <x-input title="密码" v-model.trim="form.staffPwd" required></x-input>
+            <x-input title="密码" v-model.trim="form.staffPwd" required type="password" ></x-input>
         </group>
         <x-button type="primary" action-type="button" @click.native="showToast()" :gradients="['#1D62F0', '#19D5FD']" text="登录" :disabled="disabledButton"></x-button>
         <toast v-model="showStatus" type="warn">{{ toastText }}</toast>
@@ -27,7 +27,7 @@
         data(){
             return {
                form:{
-                    staffName:'LD',
+                    staffName:'',
                     staffPwd:'123456'
                },
                showStatus:false,
@@ -47,16 +47,16 @@
                     this.showStatus = true
                     return false
                 }else{
-                    let self = this
                     this.$api.homeRequest.getToken(this.form).then((res)=>{
                         if( res.data.code == 200 ){
                             store.commit('userLogin',res.data.list)
                             store.commit('setLoginStatus',1)
+                            sessionStorage.setItem('demandApp_loginName',this.form.staffName)
                             if ( store.state.navList == '' && store.state.userInfo.client.role !== '' ){
                                 store.dispatch('permission', store.state.userInfo.client.role)
                                 this.$router.addRoutes(store.state.navList)
                             }
-                            self.$router.push('/common/operate')
+                            this.$router.push('/common/operate')
                         }
                     })
                 }
@@ -64,6 +64,9 @@
             }
         },
         created(){
+            if( sessionStorage.getItem('demandApp_loginName') ){
+                this.form.staffName = sessionStorage.getItem('demandApp_loginName')
+            }
         }
     }
 </script>

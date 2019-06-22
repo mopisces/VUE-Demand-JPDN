@@ -18,7 +18,7 @@ const modRequest = {
 	 */
 	saveMod( data ){
 		var params = new URLSearchParams()
-		params.append('id', encrypt.strEncrpt(store.state.mod.id))
+		params.append('id', encrypt.strEncrpt(store.state.modifyDetail.jumpDetail.id))
 		params.append('mod_instru', data.mod_instru)
 		params.append('complete_state', data.complete_state)
 		params.append('complete_time', data.complete_time)

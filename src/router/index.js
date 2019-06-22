@@ -12,12 +12,14 @@ const modifyDetail = r => require.ensure([], () => r(require('@/components/page/
 const newTest = r => require.ensure([], () => r(require('@/components/page/TestList')), 'newTest')
 const testDetail = r => require.ensure([], () => r(require('@/components/page/TestDetail')), 'testDetail')
 const newEchart = r => require.ensure([], () => r(require('@/components/page/DataView')), 'newEchart')
+const echartDetail = r => require.ensure([], () => r(require('@/components/page/ViewDetail')), 'echartDetail')
+
 const home = r => require.ensure([], () => r(require('@/components/page/Home')), 'home')
 //公共页面
 const login = r => require.ensure([], () => r(require('@/components/common/Login')), 'login')
 const failure = r => require.ensure([], () => r(require('@/components/common/404')), 'failure')
 const limit =  r => require.ensure([], () => r(require('@/components/common/403')), 'limit')
-const customer = r => require.ensure([], () => r(require('@/components/common/Customer')), 'customer')
+//const customer = r => require.ensure([], () => r(require('@/components/common/Customer')), 'customer')
 
 Vue.use(Router)
 
@@ -71,6 +73,11 @@ export const asyncRouterMap = [
                 path:'echart',
                 meta: { role: '*' },
                 component:newEchart
+            },
+            {
+                path:'viewDetail',
+                meta: { role: '*' },
+                component:echartDetail
             }
         ]
     },
@@ -84,12 +91,12 @@ export const asyncRouterMap = [
 
 
 let routes = [
-	{
+	/*{
 		path:'/customer',
 		name:'customer',
 		meta:{ permission:false },
 		component:customer,
-	},
+	},*/
     {
         path: '/login',
         name: 'login',

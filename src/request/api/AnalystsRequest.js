@@ -13,12 +13,11 @@ const analystsRequest = {
 	},
 	/**
 	 * [saveAnalysts 保存分析]
-	 * @param  {[object]} data [结果数据]
-	 * @return {[promise]}      [description]
+	 * @return {[promise]}      [axios.post]
 	 */
 	saveAnalysts( data ){
 		var params = new URLSearchParams()
-		params.append('id', encrypt.strEncrpt(store.state.analysts.id) )
+		params.append('id', encrypt.strEncrpt(store.state.analystsDetail.jumpDetail.id) )
 		params.append('demand_id', data.demand_id)
 		params.append('demand_type', data.demand_type)
 		params.append('priority_level', data.priority_level)

@@ -4,13 +4,13 @@
 			<group>
 				<popup-picker ref="filterPick" :data="viewData.options" v-model="form.filterData" title="筛选条件" @on-change="filterChange" :show-name="status.showName" popup-title="筛选条件" ></popup-picker>
 				<button-tab >
-					<button-tab-item @on-item-click="clickBar" selected>柱状图</button-tab-item>
-					<button-tab-item @on-item-click="clickLine">饼状图</button-tab-item>
+					<button-tab-item @on-item-click="clickBar" :selected="status.histogramShow">柱状图</button-tab-item>
+					<button-tab-item @on-item-click="clickLine" :selected="! status.histogramShow">饼状图</button-tab-item>
 				</button-tab>
 			</group>
 			<popup-header :title="title"></popup-header>
-			<ve-histogram :data="chartData" :settings="chartSettings" v-if="status.histogramShow"></ve-histogram>
-			<ve-pie :data="chartData" v-if="! status.histogramShow"></ve-pie>
+			<ve-histogram :data="chartData" :settings="setting.chartSettings" v-if="status.histogramShow" :events="chartEvents"></ve-histogram>
+			<ve-pie :data="chartData" v-if="! status.histogramShow" :events="chartEvents"></ve-pie>
 		</div>
 	</scroller>
 </template>
@@ -34,9 +34,28 @@
 			PopupHeader
 		},
 		data () {
-			this.histogramChartSettings = {stack: { '需求': ['全部需求', '重大需求'] }}
-			this.chartSettings = {metrics: ['全部需求', '重大需求'],dimension: ['客户名称']}
+			let self = this
+			this.chartEvents = {
+				click:function (e) {
+					let data = {
+						time:store.state.echart.cusFilterData[1],
+						cusName:e.name
+					}
+					if(e.seriesType == 'pie'){
+						store.commit('setCusStatus',false)
+					}
+					if( e.seriesType == 'bar' ){
+						store.commit('setCusStatus',true)
+					}
+					store.commit('setDataViewStatus',0)
+					store.commit('setEchartDetail',data)
+					self.$router.push('/common/viewDetail')
+				}
+			}
 			return {
+				setting:{
+					chartSettings:{metrics: ['全部需求', '重大需求'],dimension: ['客户名称']}
+				},
 		        chartData:{
 		        	columns: ['客户名称', '全部需求', '重大需求'],
 		        	rows:[]
@@ -56,6 +75,7 @@
 	  	},
 		created(){
 			this.form.filterData = store.state.echart.cusFilterData
+			this.status.histogramShow = store.state.echart.cusStatus.histogramShow
 			this.createViewOptions()
 			this.getDataRows(this.form.filterData)
 	  	},
@@ -74,7 +94,7 @@
 	  				this.chartData.rows = store.state.echart.cusChartRows
 	  				return 
 	  			}
-	  			this.$api.echartRequest.cusEchartData( data ).then((res)=>{
+	  			this.$api.echartRequest.echartData( data ).then((res)=>{
 	  				if(res.data.code == 200){
 	  					this.chartData.rows = res.data.list
 	  					store.commit('setCusRows',res.data.list)

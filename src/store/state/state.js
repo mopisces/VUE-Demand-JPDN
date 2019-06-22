@@ -25,30 +25,6 @@ const state = {
         }
     },  
     /**
-     * [analysts 分析页面跳转记录对应index及ID]
-     * @type {Object}
-     */
-    analysts:{
-        id:'',
-        deleteIndex: 0
-    },
-    /**
-     * [mod 修改页面跳转记录对应index及ID]
-     * @type {Object}
-     */
-    mod:{
-        id:'',
-        deleteIndex: 0
-    },
-    /**
-     * [test 测试页面跳转记录对应index及ID]
-     * @type {Object}
-     */
-    test:{
-        id:'',
-        deleteIndex:0
-    },
-    /**
      * [authUrl operate页面相关权限路由的显示及Badge]
      * @type {Object}
      */
@@ -72,7 +48,7 @@ const state = {
         demandStatus:['0','1'],
         isMajor:'2',
         demandType:['0','1','2','3'],
-        priorityLevel:'2',
+        priorityLevel:['0','1','2','3'],
         curPage:1,
         keyWorld:'',
         keyType:['1']
@@ -95,8 +71,61 @@ const state = {
         cusFilterData:['1','2019'],//客户图表过滤数据
         timeFilterData:['2019'],//时间图表过滤数据
         cusChartRows:[],//客户图表数据
-        timeChartRows:[]//时间图表数据
-    }
+        timeChartRows:[],//时间图表数据
+        cusStatus:{
+            histogramShow:true,
+        },
+        timeStatus:{
+            histogramShow:true
+        },
+        dataViewStatus:{
+            tabViewIndex:'0'
+        }
+    },
+    /**
+     * [echartDetail 图表详细页参数]
+     * @type {Object}
+     */
+    echartDetail:{
+        time:'',
+        cusName:''
+    },
+    /**
+     * [analystsDetail 分析详细页状态]
+     * @type {Object}
+     */
+    analystsDetail:{
+        form:{},
+        jumpDetail:{
+            id:'',
+            deleteIndex:null
+        }
+    },
+    /**
+     * [modifyDetail 修改详细页状态]
+     * @type {Object}
+     */
+    modifyDetail:{
+        form:{},
+        jumpDetail:{
+            id:'',
+            deleteIndex:null
+        }
+    },
+    /**
+     * [testDetail 测试详细页状态]
+     * @type {Object}
+     */
+    testDetail:{
+        form:{},
+        jumpDetail:{
+            id:'',
+            deleteIndex:null
+        }
+    }/*,
+    cancel:{
+        status:null
+    }*/
 }
 
 export default state

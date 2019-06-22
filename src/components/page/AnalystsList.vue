@@ -7,32 +7,31 @@
 		</group>
 		<scroller lock-x scrollbar-y use-pulldown @on-pulldown-loading="pullDownRefresh()" ref="AScroller" height="-160">
 			<div>
-				<group v-for="(item,index) in analystsList" :key="index"  gutter="0">
+				<group v-for="(item,index) in analystsList" :key="index"  gutter="0"  style="background-color:#999;border-style:solid;border-color:#999;">
 					<cell is-link :border-intent = "false" @click.native="jumpUrl(item.id,index)" primary="content">
 						<span slot="title">
 							<span style="vertical-align:middle;">{{ item.demand_id }}</span>
+							<badge :text="item.propose_time"></badge>
 							<badge text="待分析"></badge>
 						</span>
-					</cell>
-					<div>
 						<span slot="inline-desc">
-							<badge :text="item.propose_cus" v-if="item.propose_cus"></badge>
-							<badge :text="item.contact_person" v-if="item.contact_person"></badge>
-							<badge text="内部需求" v-if="!item.propose_cus"></badge>
-							<badge :text="item.propose_time"></badge>
-						</span slot="child">
-						<cell title="需求说明" :value="item.demand_instru" value-align="left"></cell>
-					</div>
+							<badge :text="item.propose_cus"></badge>
+							<!-- <badge :text="item.propose_cus" v-if="item.propose_cus"></badge> -->
+							<!-- <badge text="内部需求" v-if="!item.propose_cus"></badge> -->
+						</span >
+					</cell>
+					<cell title="需求说明" :value="item.demand_instru" value-align="left"></cell>
 				</group>
 				<divider>我也是有底线的...</divider>
 				<divider></divider>
 			</div>
 		</scroller>
 		<toast v-model="status.showToast" @on-hide="hideToast()" :time="2000" type="warn">服务器错误</toast>
+		<loading :show="load.show" :text="load.text"></loading>
 	</div>
 </template>
 <script>
-	import { XHeader, Group, Cell, Divider, Checker, CheckerItem,Countup, Toast, Scroller, Badge} from 'vux'
+	import { XHeader, Group, Cell, Divider, Checker, CheckerItem,Countup, Toast, Scroller, Badge, Loading} from 'vux'
   	import store from '@/store/store'
 
   	export default {
@@ -46,7 +45,8 @@
 			Countup,
 			Toast,
 			Scroller,
-			Badge
+			Badge,
+			Loading,
 		},
 		data(){
 			return {
@@ -55,12 +55,16 @@
 					showToast:false
 				},
 				totalRecord:0,
+				load:{
+					show:false,
+					text:'加载中'
+				}
 			}
 		},
 		methods:{
 			/*跳转至具体页面*/
 			jumpUrl (id , index) {
-				store.commit('setAnalysts',{id:id,deleteIndex:index})
+				store.commit('setAnalysts', {id:id,deleteIndex:index} )
 				this.$router.push('/common/adetail')
 			},
 			/*获取列表*/
@@ -68,12 +72,14 @@
 				this.$api.analystsRequest.analystsList().then((res)=>{
 					if( res.data.code == 200){
 						this.analystsList = res.data.list.list
+						console.dir(res.data.list.list[0].propose_cus)
 						this.totalRecord = parseInt( res.data.list.totalRecord )
 						sessionStorage.setItem('analystsList',JSON.stringify(this.analystsList))
 					}else{
 						this.status.showToast = true
 					}
 				})
+				this.load.show = false
 			},
 			/*数据获取失败后跳转*/
 			hideToast(){
@@ -81,16 +87,20 @@
 			},
 			/*下拉刷新数据*/
 			pullDownRefresh(){
-				this.getCreateData()
-				this.$nextTick(() => {
-					setTimeout(() => {
-						this.$refs.AScroller.donePulldown()
-					},1000)
-				})
+				this.load.show = true
+				setTimeout(()=>{
+					this.getCreateData()
+					this.$nextTick(() => {
+						setTimeout(() => {
+							this.$refs.AScroller.donePulldown()
+						}, 10)
+					})
+				},3000)
     		}
 		},
 		created(){
 			//生产环境时开启
+			this.load.show = true
 			store.commit('setTitle','分析列表')
 			this.getCreateData()
 		},

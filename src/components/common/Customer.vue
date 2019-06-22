@@ -3,7 +3,7 @@
         <x-header :left-options="{showBack: false}" title="后台管理系统"></x-header>
         <group title="客户入口">
             <x-input title="用户名" v-model.trim="form.customerName" required></x-input>
-            <x-input title="密码" v-model.trim="form.phoneNum" required></x-input>
+            <x-input title="密码" v-model.trim="form.phoneNum" required type="password" ></x-input>
         </group>
         <x-button type="primary" action-type="button" @click.native="showToast()" :gradients="['#1D62F0', '#19D5FD']" text="登录" :disabled="disabledButton"></x-button>
         <toast v-model="showStatus" type="warn">{{ toastText }}</toast>
@@ -25,13 +25,16 @@
         },
         data(){
             return {
-               form:{
+                form:{
                     customerName:'JYYS',
                     phoneNum:'13958422276'
-               },
-               showStatus:false,
-               toastText:'',
-               disabledButton:false
+                },
+                showStatus:false,
+                toastText:'',
+                disabledButton:false,
+                inputSetting:{
+                    type:'password'
+                }
             }
         },
         methods: {

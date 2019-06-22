@@ -2,14 +2,13 @@
 	<div>
 		<group>
 			<cell title="需求分析人员" :value="modDetail.analysts"></cell>
-			<cell title="需求说明" :value="modDetail.demand_instru"></cell>
-			<x-textarea v-model.trim="form.demand_instru" :max="5000" :rows="1" autosize title="修改需求说明"></x-textarea>
+			<x-textarea v-model.trim="form.demand_instru" :max="5000" :rows="1" autosize title="添加需求说明" ></x-textarea>
 			<cell title="需求提出日期" :value="modDetail.propose_time"></cell>
 			<cell title="期望完成日期" :value="modDetail.expect_com_time"></cell>
 			<cell title="需求确认日期" :value="modDetail.confirm_time"></cell>
 			<cell title="计划完成日期" :value="modDetail.plan_com_time"></cell>
 			<x-textarea v-model.trim="form.mod_instru" :max="5000" :rows="1" autosize title="添加修改说明" ></x-textarea>
-			<selector title="完成状态" direction="rtl" :options="list.completeStateList" v-model="form.complete_state">
+			<selector title="完成状态" direction="rtl" :options="completeStateList" v-model="form.complete_state">
 			</selector>
 			<datetime v-model="form.complete_time" :start-date="startDate"  format="YYYY-MM-DD" title="完成时间(默认今天)"></datetime>
 			<cell title="修改人员" :value="form.staff_name"></cell>
@@ -50,10 +49,10 @@
 				modDetail:{},
 				form:{
 					mod_instru:'',
-					complete_state:'0',
-					complete_time:'',
-					staff_name:'',
-					demand_instru:''
+		            complete_state:'1',
+		            complete_time:startDate.setToday(),
+		            staff_name:'',
+		            demand_instru:''
 				},
 				list:{
       				completeStateList:[]
@@ -76,20 +75,13 @@
 		},
 		methods:{
 			setCreateData(){
-				this.form.id = store.state.mod.id
-				if( this.form.id === '' ){
-					this.setToast('服务器异常，请稍后再试')
-					setTimeout(()=>{
-			             this.$router.push('/common/operate')
-			        },2000)
-					return 
+				if( typeof(store.state.modifyDetail.jumpDetail.id) != 'string' ){
+					this.setToast('非法路由访问')
+					this.$router.push('/common/modlist')
 				}
-				this.list.completeStateList = options.completeStateList
-				this.startDate = startDate.setToday()
-				this.form.complete_time = this.startDate
 				this.form.staff_name = store.state.userInfo.client.name
 				let list = JSON.parse( sessionStorage.getItem( 'modList' ) ) 
-				let index = store.state.mod.deleteIndex
+				let index = store.state.modifyDetail.jumpDetail.deleteIndex
 				Object.assign(this.modDetail,list[index])
 				this.form.demand_instru = this.modDetail.demand_instru
 			},
@@ -105,9 +97,10 @@
 				this.$api.modRequest.saveMod(this.form).then((res)=>{
 					if ( res.data.code === 200 ){
 						let array = JSON.parse( sessionStorage.getItem( 'modList' ) )
-						array.splice(store.state.mod.deleteIndex,1)
+						array.splice(store.state.modifyDetail.jumpDetail.deleteIndex,1)
 						sessionStorage.setItem('modList',JSON.stringify(array))
 						this.setToast('数据提交成功','success')
+						store.commit('setMod',{})
 						setTimeout(()=>{
 			              this.$router.push('/common/operate')
 			            },2000)
@@ -121,6 +114,12 @@
 				this.returnMsg.text = text
 				this.returnMsg.show = true
 			}
-		}
+		},
+	  	computed:{
+	  		completeStateList(){
+	  			return options.completeStateList
+	  		}
+	  	}
+
 	}
 </script>

@@ -5,12 +5,12 @@
 			<x-input title="需求编号" v-model="form.demand_id" placeholder="修改编号" text-align="right"></x-input>
 			<cell title="需求提出时间" :value="analystsDetail.propose_time"></cell>
   			<cell title="期望完成日期" :value="analystsDetail.expect_com_time"></cell>
-			<selector title="需求类型" direction="rtl" :options="list.demandTypeList" v-model="form.demand_type"></selector>
-			<selector title="优先级" direction="rtl" :options="list.priorityLevelList" v-model="form.priority_level"></selector>
+  			<cell title="分析人员" :value="analystsDetail.analysts"></cell>
+			<selector title="需求类型" direction="rtl" :options="demandTypeList" v-model="form.demand_type"></selector>
+			<selector title="优先级" direction="rtl" :options="priorityLevelList" v-model="form.priority_level"></selector>
 			<x-switch title="是否重大" :value-map="['0', '1']" v-model="form.is_major_mod"></x-switch>
 			<datetime v-model="form.confirm_time" :start-date="startDate"  format="YYYY-MM-DD" title="需求确认时间"></datetime>
 			<datetime v-model="form.plan_com_time" :start-date="startDate"  format="YYYY-MM-DD" title="计划完成时间"></datetime>
-			<cell title="分析人员" :value="form.staff_name"></cell>
 			<x-button type="primary" @click.native="showConfirm()" >提交</x-button>
 		</group>
 		<div v-transfer-dom>
@@ -50,18 +50,12 @@
 				analystsDetail:{},
 				demandId:'',
 				form:{
-					id:'',//demandtable id
-					staff_name:'',
-					demand_type:'3',
-					priority_level:'0',
-					is_major_mod:'0',
-					confirm_time:'',
-					plan_com_time:'',
-					demand_id:''
-				},
-				list:{
-					demandTypeList:[],
-					priorityLevelList:[]
+		            demand_type:'3',
+		            priority_level:'1',
+		            is_major_mod:'0',
+		            confirm_time:startDate.setToday(),
+		            plan_com_time:startDate.setToday(),
+		            demand_id:''
 				},
 				status:{
 					showConfirm:false
@@ -72,7 +66,10 @@
 					show:false
 				},
 				tipText:'',
-				startDate:''
+				startDate:'',
+				pageData:{
+					name:''
+				}
 			}
 		},
 		created(){
@@ -81,44 +78,40 @@
 			this.setCreateData()
 		},
 		methods:{
-			/*提取选中数据并设置默认值*/
+			/**
+			 * [setCreateData 创建页面时填充数据]
+			 */
 			setCreateData(){
-				this.form.id = store.state.analysts.id
-				if( this.form.id === '' ){
-					this.setToast('服务器异常，请稍后再试')
-					setTimeout(()=>{
-			             this.$router.push('/common/operate')
-			        },2000)
-					return 
+				if( typeof(store.state.analystsDetail.jumpDetail.id) != 'string' ){
+					this.setToast('非法路由访问')
+					this.$router.push('/common/analist')
 				}
-				this.list.demandTypeList = options.demandTypeList
-				this.list.priorityLevelList = options.priorityLevelList
-				this.form.confirm_time = startDate.setToday()
-				this.form.plan_com_time = startDate.setToday()
-				this.form.staff_name = store.state.userInfo.client.name
+				this.pageData.name = store.state.userInfo.client.name
 				let list = JSON.parse( sessionStorage.getItem( 'analystsList' ) )
-				let index = store.state.analysts.deleteIndex
-				this.form.id = list[index].id
+				let index = store.state.analystsDetail.jumpDetail.deleteIndex
 				this.demandId = list[index].demand_id
 				Object.assign(this.analystsDetail,list[index])
 			},
-			/*检查数据完整并显示confirm*/
+			/**
+			 * [showConfirm 检查数据完整并显示confirm]
+			 */
 			showConfirm(){
 				if( this.form.demand_id == ''){
 					this.form.demand_id = this.demandId
 				}
 				this.status.showConfirm = true
 			},
-			/*提交数据*/
+			/**
+			 * [onConfirm 提交数据/并删除sessionStorage中对应的数据]
+			 */
 			onConfirm(){
-				let self = this
-				store.commit('setUserInfoBadge','/analysts')
-				this.$api.analystsRequest.saveAnalysts( self.form ).then((res)=>{
+				this.$api.analystsRequest.saveAnalysts(this.form).then((res)=>{
 					if (res.data.code == 200){
 						let array = JSON.parse( sessionStorage.getItem( 'analystsList' ) )
-						array.splice(store.state.analysts.deleteIndex,1)
+						array.splice(store.state.analystsDetail.jumpDetail.deleteIndex,1)
 						sessionStorage.setItem('analystsList',JSON.stringify(array))
 						this.setToast('数据提交成功','success')
+						store.commit('setAnalysts',{})
 						setTimeout(()=>{
 			              this.$router.push('/common/operate')
 			            },2000)
@@ -128,16 +121,25 @@
 				})
 				
 			},
+			/**
+			 * [setToast 设置Toast]
+			 * @param {[string]} text [Toast提示文字]
+			 * @param {String} type [Toast类型]
+			 */
 			setToast( text, type='warn' ){
 				this.returnMsg.type = type
 				this.returnMsg.text = text
 				this.returnMsg.show = true
 			}
-			/*,
-			onHide(){
-				this.router.push('/analysts')
-			}*/
-		}
+		},
+	  	computed:{
+	  		demandTypeList(){
+	  			return options.demandTypeList
+	  		},
+	  		priorityLevelList(){
+	  			return options.analystsPriorityLevelList
+	  		}
+	  	}
 
 	}
 </script>

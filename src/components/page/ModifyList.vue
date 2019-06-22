@@ -7,36 +7,34 @@
 		</group>
 		<scroller lock-x scrollbar-y use-pulldown @on-pulldown-loading="pullDownRefresh()" ref="modScroller" height="-160">
 			<div>
-				<group v-for="(item,index) in modList" :key="index" gutter="0">
+				<group v-for="(item,index) in modList" :key="index" gutter="0"  style="background-color:#999;border-style:solid;border-color:#999;">
 					<cell is-link :border-intent = "false" @click.native="jumpUrl(item.id,index)" primary="content" >
                       	<icon type="circle" slot="icon" v-if="item.is_major_mod == 0"></icon>
 						<icon type="warn" slot="icon" v-if="item.is_major_mod == 1"></icon>
                       	<span slot="title">
 							<span style="vertical-align:middle;">{{ item.demand_id }}</span>
-							<badge text="待修改"></badge>
-							<badge :text="statusDemandType(item.demand_type)"></badge>
-							<badge :text="statusPriorityLevel(item.priority_level)"></badge>
-						</span>
-              		</cell>
-              		<div>
-              			<span slot="inline-desc">
-							<badge :text="item.propose_cus" v-if="item.propose_cus"></badge>
-							<badge :text="item.contact_person" v-if="item.contact_person"></badge>
-							<badge text="内部需求" v-if="!item.propose_cus"></badge>
 							<badge :text="item.propose_time"></badge>
-              			</span>
-              			<cell title="需求说明" :value="item.demand_instru"  slot="child" value-align="left" ></cell>
-              		</div>
+							<badge text="待修改"></badge>
+						</span>
+						<span slot="inline-desc">
+							<badge :text="item.propose_cus" v-if="item.propose_cus"></badge>
+							<badge :text="statusDemandType(item.demand_type)"></badge>
+							<badge :text="statusPriorityLevel(item.priority_level)" v-if="item.priority_level == 2"></badge>
+          				</span>
+              		</cell>
+          			
+          			<cell title="需求说明" :value="item.demand_instru" value-align="left" ></cell>
 				</group>
 				<divider>我也是有底线的...</divider>
 				<divider></divider>
 			</div>
 		</scroller>
 		<toast v-model="status.showToast" @on-hide="hideToast()" :time="2000" type="warn">服务器错误</toast>
+		<loading :show="load.show" :text="load.text"></loading>
 	</div>
 </template>
 <script>
-	import {Divider, Group, Cell, Checker, CheckerItem, Countup, Toast, Scroller, Badge, Icon } from 'vux'
+	import {Divider, Group, Cell, Checker, CheckerItem, Countup, Toast, Scroller, Badge, Icon, Loading } from 'vux'
 
 	import formatter from '@/util/formatter' 
 	import store from '@/store/store'
@@ -52,7 +50,8 @@
 			Toast,
 			Scroller ,
 			Badge,
-			Icon
+			Icon,
+			Loading
 		},
 		data(){
 			return {
@@ -60,6 +59,10 @@
 				modList:[],
 				status:{
 					showToast:false
+				},
+				load:{
+					show:false,
+					text:'加载中'
 				}
 			}
 		},
@@ -87,20 +90,25 @@
 						this.status.showToast = true
 					}
 				})
+				this.load.show = false
 			},
 			hideToast(){
 				this.$router.push('/common/operate')
 			},
 			pullDownRefresh(){
-				this.getCreateData()
-				this.$nextTick(() => {
-					setTimeout(() => {
-						this.$refs.modScroller.donePulldown()
-					},1000)
-				})
+				this.load.show = true
+				setTimeout(()=>{
+					this.getCreateData()
+					this.$nextTick(() => {
+						setTimeout(() => {
+							this.$refs.modScroller.donePulldown()
+						}, 10)
+					})
+				},3000)
 			}
 		},
 		created(){
+			this.load.show = true
 			store.commit('setTitle','修改列表')
 			this.getCreateData()
 		},

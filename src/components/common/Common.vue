@@ -49,6 +49,14 @@
 				}
 				store.commit('userLogin',[])
 				store.commit('setLoginStatus',null)
+			},
+			getAllCusName(){
+				this.$api.homeRequest.getCusName().then((res)=>{
+					if( res.data.code == 200){
+						sessionStorage.setItem('cusNameSearchList',JSON.stringify(res.data.list))
+						return 
+					}
+				})
 			}
 		},
 		mounted(){
@@ -57,6 +65,7 @@
 		},
 		created(){
 			this.title = store.state.title
+			this.getAllCusName()
 		},
 		computed:{
 			setTitle() {
@@ -66,6 +75,14 @@
 		watch:{
 			setTitle(newVal){
 				this.title = newVal
+			},
+			'store.state.title':{
+				handler:function(newV,oldV){
+					console.dir(newV)
+					console.dir(oldV)
+					console.dir('------------------')
+				},	
+				deep:true
 			}
 		}
 	}

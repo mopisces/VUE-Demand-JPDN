@@ -38,9 +38,7 @@ const errorHandle = (status,message) => {
    {
 		instance.post(`${base.domain}refreshToken`).then((res)=>{
 			if(res.data.code == 200){
-				
 				store.commit('userLogin',res.data.list)
-				
 				router.push('/home')
 			}
 		})
@@ -56,7 +54,7 @@ const errorHandle = (status,message) => {
    if( status === 500 ){
 		tip({text:'服务器错误，请稍后再试'})
 		store.commit('setLoginStatus',0)
-		router.push('/customer')
+		toLogin()
    }
    //参数错误
    if( status === 401 ){

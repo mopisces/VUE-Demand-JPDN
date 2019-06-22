@@ -5,7 +5,6 @@
 		<div class="error-handle">
 			<x-button class="error-btn" type="primary" size="large" @click.native="goBack()">去登陆</x-button>
 		</div>
-		<p>hello world</p>
 	</div>
 </template>
 

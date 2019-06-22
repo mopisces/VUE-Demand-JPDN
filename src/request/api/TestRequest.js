@@ -8,8 +8,10 @@ const testRequest = {
 	 * [testList 获取待测试列表及总记录数]
 	 * @return {[promise]} [description]
 	 */
-	testList(){
-		return axios.post(`${base.domain}backStage/testList`)
+	testList( type ){
+		var params = new URLSearchParams()
+		params.append('demand_belong',type)
+		return axios.post(`${base.domain}backStage/testList`,params)
 	},
 	/**
 	 * [saveTest description]
@@ -18,7 +20,7 @@ const testRequest = {
 	 */
 	saveTest( data ){
 		var params = new URLSearchParams()
-		params.append('id',encrypt.strEncrpt(store.state.test.id))
+		params.append('id',encrypt.strEncrpt(store.state.testDetail.jumpDetail.id))
 		params.append('pass_test_time',data.pass_test_time)
 		params.append('test_remark',data.test_remark)
 		return axios.post(`${base.domain}backStage/testSave`,params)
