@@ -1,4 +1,9 @@
 export default {
+          /**
+           * [statusDemandType 获取需求状态码对应中文值]
+           * @param  {[string]} val [应需求状态码]
+           * @return {[string]}     [对应中文值]
+           */
           statusDemandType(val){
                 switch(val)
                         {
@@ -18,6 +23,11 @@ export default {
                           return '未知参数';
                         }
             },
+            /**
+             * [statusPriorityLevel 获取优先级状态码对应中文值]
+             * @param  {[string]} val [优先级状态码]
+             * @return {[string]}     [对应中文值]
+             */
             statusPriorityLevel(val){
                 switch(val)
                         {
@@ -37,6 +47,11 @@ export default {
                           return '未知等级';
                         }
             },
+            /**
+             * [statusIsMajorMod 获取重大状态码对应中文值]
+             * @param  {[string]} val [重大状态码]
+             * @return {[string]}     [对应中文值]
+             */
             statusIsMajorMod(val){
                 switch(val)
                         {
@@ -50,6 +65,11 @@ export default {
                           return '否';
                         }
             },
+            /**
+             * [statusComplete 获取完成状态码对应中文值]
+             * @param  {[string]} val [完成状态码]
+             * @return {[string]}     [对应中文值]
+             */
             statusComplete(val){
                 switch(val)
                         {
@@ -63,6 +83,11 @@ export default {
                           return false;
                         }
             },
+            /**
+             * [statusPassTest 获取测试状态码对应中文值]
+             * @param  {[string]} val [测试状态码]
+             * @return {[string]}     [对应中文值]
+             */
             statusPassTest(val){
                 switch(val)
                         {
@@ -76,6 +101,11 @@ export default {
                           return false;
                         }
             },
+            /**
+             * [statusDemand 获取需求状态码对应中文值]
+             * @param  {[string]} val [需求状态码]
+             * @return {[string]}     [对应中文值]
+             */
             statusDemand(val){
               switch(val)
                 {
@@ -95,6 +125,4 @@ export default {
                     return false
                 }
             }
-              
-
 }

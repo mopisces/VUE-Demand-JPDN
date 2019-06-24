@@ -75,6 +75,9 @@
 			}
 		},
 		methods:{
+			/**
+			 * [getCreateData 创建页面需要的数据填充]
+			 */
 			getCreateData(){
 				this.$api.echartRequest.echartDetail().then((res)=>{
 					if( res.data.code == 200 ){
@@ -84,35 +87,57 @@
 				this.load.show = false
 			},
 			/**
-			 * [根据状态码获取对应中文名称]
+			 * [statusDemandType 根据状态码获取对应中文名称]
 			 * @param  {[string]} val [状态码]
 			 */
 			statusDemandType(val){
 				return formatter.statusDemandType(val)
 			},
+			/**
+			 * [statusPriorityLevel 获取优先级状态码对应中文]
+			 * @param  {[string]} val [优先级状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusPriorityLevel(val){
 				return formatter.statusPriorityLevel(val)
 			},
+			/**
+			 * [statusIsMajorMod 获取重大状态码对应中文]
+			 * @param  {[string]} val [重大状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusIsMajorMod(val){
 				return formatter.statusIsMajorMod(val)
 			},
+			/**
+			 * [statusComplete 获取完成状态码对应中文]
+			 * @param  {[string]} val [完成状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusComplete(val){
 				return formatter.statusComplete(val)
 			},
+			/**
+			 * [statusPassTest 获取测试状态码对应中文]
+			 * @param  {[string]} val [测试状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusPassTest(val){
 				return formatter.statusPassTest(val)
 			},
+			/**
+			 * [statusDemand 获取需求状态码对应中文]
+			 * @param  {[string]} val [需求状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusDemand(val){
 				return formatter.statusDemand(val)
 			}
 		},
 		created(){
 			this.load.show = true
-			store.commit('setTitle','详细信息')
+			store.commit('setTitle','详细信息') //修改vuex中标题值
 			this.getCreateData()
-		},
-		mounted(){
-
 		}
 	}
 </script>

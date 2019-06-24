@@ -72,11 +72,7 @@
 				}
 			}
 		},
-		created(){
-			/*生产环境开启*/
-			store.commit('setTitle','分析需求')
-			this.setCreateData()
-		},
+		
 		methods:{
 			/**
 			 * [setCreateData 创建页面时填充数据]
@@ -132,12 +128,16 @@
 				this.returnMsg.show = true
 			}
 		},
+		created(){
+			store.commit('setTitle','分析需求') //修改vuex中标题值
+			this.setCreateData()
+		},
 	  	computed:{
 	  		demandTypeList(){
 	  			return options.demandTypeList
 	  		},
 	  		priorityLevelList(){
-	  			return options.analystsPriorityLevelList
+	  			return options.priorityLevelList
 	  		}
 	  	}
 

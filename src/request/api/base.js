@@ -1,5 +1,5 @@
 /**
- * 接口域名
+ * 定义接口域名
  */
 import config from '../../../config/domain.js'
 const base = {    

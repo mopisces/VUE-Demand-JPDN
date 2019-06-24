@@ -36,6 +36,9 @@
             }
         },
         methods: {
+            /**
+             * [showToast 检查数据完整/提交数据/更新vuex中的navList]
+             */
             showToast(){
                 if( this.form.staffName == '' ){
                     this.toastText = '用户名不能为空'

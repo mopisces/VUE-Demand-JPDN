@@ -60,10 +60,6 @@
 				}
 			}
 		},
-		created(){
-			store.commit('setTitle','测试需求')
-			this.setCreateData()
-		},
 		methods:{
 			/**
 			 * [setCreateData 创建页面需要的数据填充]
@@ -124,6 +120,10 @@
 				this.returnMsg.text = text
 				this.returnMsg.show = true
 			}
+		},
+		created(){
+			store.commit('setTitle','测试需求') //修改vuex中标题值
+			this.setCreateData()
 		},
 	  	computed:{
 	  		testStateList(){

@@ -38,9 +38,16 @@
 			}
 		},
 		methods:{
+			/**
+			 * [pushUrl 底部页面跳转]
+			 * @param  {[string]} url [目标URL]
+			 */
 			pushUrl( url ){
 				this.$router.push( url )
 			},
+			/**
+			 * [logout 清空数据并退出]
+			 */
 			logout(){
 				if( store.state.userInfo.client.brand == 'customer' ){
 					this.$router.push( '/customer' )
@@ -50,6 +57,9 @@
 				store.commit('userLogin',[])
 				store.commit('setLoginStatus',null)
 			},
+			/**
+			 * [getAllCusName 获取所有的客户名称并存储在本地]
+			 */
 			getAllCusName(){
 				this.$api.homeRequest.getCusName().then((res)=>{
 					if( res.data.code == 200){
@@ -59,20 +69,26 @@
 				})
 			}
 		},
-		mounted(){
-			this.bodyPaddingTop = this.$refs.header.$el.clientHeight  + 'px'  
-			this.bodyPaddingBottom = this.$refs.bar.$el.clientHeight  + 'px' 
-		},
 		created(){
 			this.title = store.state.title
 			this.getAllCusName()
 		},
+		mounted(){
+			this.bodyPaddingTop = this.$refs.header.$el.clientHeight  + 'px'  
+			this.bodyPaddingBottom = this.$refs.bar.$el.clientHeight  + 'px' 
+		},
 		computed:{
+			/**
+			 * [setTitle 暴露vuex中的title]
+			 */
 			setTitle() {
 				return store.state.title
 			}
 		},
 		watch:{
+			/**
+			 * [setTitle 监听title变化]
+			 */
 			setTitle(newVal){
 				this.title = newVal
 			},

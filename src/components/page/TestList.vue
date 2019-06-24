@@ -83,15 +83,25 @@
 				this.pullDownRefresh()
 			},
 			/**
-			 * [获取状态对应中文]
+			 * [根据状态码获取对应中文名称]
 			 * @param  {[string]} val [状态码]
 			 */
 			statusDemandType(val){
 		    	return formatter.statusDemandType(val)
 		    },
+		    /**
+			 * [statusPriorityLevel 获取优先级状态码对应中文]
+			 * @param  {[string]} val [优先级状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 		    statusPriorityLevel(val){
 		     	return formatter.statusPriorityLevel(val)
 		    },
+		    /**
+			 * [statusIsMajorMod 获取重大状态码对应中文]
+			 * @param  {[string]} val [重大状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 		    statusIsMajorMod(val){
 		      	return formatter.statusIsMajorMod(val)
 		    },
@@ -136,13 +146,14 @@
 					this.$nextTick(() => {
 						setTimeout(() => {
 							this.$refs.testScroller.donePulldown()
+							this.$refs.testScroller.reset({top:0})
 						}, 10)
 					})
-				},2000)
+				},1000)
 			}
 		},
 		created(){
-			store.commit('setTitle','测试列表')
+			store.commit('setTitle','测试列表')  //修改vuex中标题值
 			this.getCreateData()
 		},
 		mounted(){

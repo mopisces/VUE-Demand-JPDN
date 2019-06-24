@@ -13,6 +13,10 @@ const echartRequest = {
 		params.append('data',encrypt.strEncrpt(data.join('*')))
 		return axios.post(`${base.domain}backStage/echartData`,params)
 	},
+	/**
+	 * [echartDetail 获取图表详细信息]
+	 * @return {[promise]} [axios.post]
+	 */
 	echartDetail(){
 		var params = new URLSearchParams()
 		params.append('data',encrypt.strEncrpt(JSON.stringify(store.state.echartDetail)))

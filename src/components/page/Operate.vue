@@ -56,15 +56,17 @@
 	  			}
 	  		}
 	  	},
-	  	created () {
-	  		store.commit('setTitle','操作首页')
-	  		this.getAuthUrl()
-	  		//console.dir(JSON.parse(sessionStorage.getItem('cusNameSearchList')))
-	  	},
 	  	methods:{
+	  		/**
+	  		 * [pushUrl 跳转页面]
+	  		 * @param  {[string]} url [目标URL]
+	  		 */
 	  		pushUrl(url){
 	  			this.$router.push(url)
 	  		},
+	  		/**
+	  		 * [getAuthUrl 获取对应的权限路由及Badge]
+	  		 */
 	  		getAuthUrl(){
 	  			this.$api.homeRequest.getAuthUrl().then((res)=>{
 		  			if(res.data.code == 200 ){
@@ -73,6 +75,10 @@
 		  			}
 	  			})
 	  		}
+	  	},
+	  	created () {
+	  		store.commit('setTitle','操作首页') //修改vuex中标题值
+	  		this.getAuthUrl()
 	  	}
 	}
 </script>

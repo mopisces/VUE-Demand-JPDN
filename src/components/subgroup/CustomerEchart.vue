@@ -2,10 +2,10 @@
 	<scroller height="-140px" lock-x>
 		<div>
 			<group>
-				<popup-picker ref="filterPick" :data="viewData.options" v-model="form.filterData" title="筛选条件" @on-change="filterChange" :show-name="status.showName" popup-title="筛选条件" ></popup-picker>
+				<popup-picker ref="filterPick" :data="viewOptions" v-model="form.filterData" title="筛选条件" @on-change="filterChange" :show-name="status.showName" popup-title="筛选条件" ></popup-picker>
 				<button-tab >
 					<button-tab-item @on-item-click="clickBar" :selected="status.histogramShow">柱状图</button-tab-item>
-					<button-tab-item @on-item-click="clickLine" :selected="! status.histogramShow">饼状图</button-tab-item>
+					<button-tab-item @on-item-click="clickPie" :selected="! status.histogramShow">饼状图</button-tab-item>
 				</button-tab>
 			</group>
 			<popup-header :title="title"></popup-header>
@@ -35,6 +35,9 @@
 		},
 		data () {
 			let self = this
+			/**
+			 * [chartEvents 点击图表时触发/修改vuex中的状态]
+			 */
 			this.chartEvents = {
 				click:function (e) {
 					let data = {
@@ -73,22 +76,21 @@
 				title:''
 			}
 	  	},
-		created(){
-			this.form.filterData = store.state.echart.cusFilterData
-			this.status.histogramShow = store.state.echart.cusStatus.histogramShow
-			this.createViewOptions()
-			this.getDataRows(this.form.filterData)
-	  	},
 	  	methods:{
+	  		/**
+	  		 * [filterChange popup-picker变化时触发/修改vuex中的状态值]
+	  		 * @param  {[array]} val [过滤状态码]
+	  		 */
 	  		filterChange(val){
 	  			if( this.form.filterData.join('*') == store.state.echart.cusFilterData.join('*') ){
 	  				return 
 	  			}
 	  			store.commit('setEchartCus',val)
 	  		},
-	  		createViewOptions(){
-	  			this.viewData.options = options.customerEchart
-	  		},
+	  		/**
+	  		 * [getDataRows 获取图表数据/并设置标题]
+	  		 * @param  {[array]} data [图表状态]
+	  		 */
 	  		getDataRows( data ){
 	  			if( store.state.echart.cusChartRows.length != '0' ){
 	  				this.chartData.rows = store.state.echart.cusChartRows
@@ -103,18 +105,42 @@
 	  			let title = store.state.echart.cusFilterData[0] == 1 ? ('--TOP10'):('--LAST10')
 	  			this.title = store.state.echart.cusFilterData[1] + '年客户需求总览' + title
 	  		},
+	  		/**
+	  		 * [clickBar 显示柱状图]
+	  		 */
 	  		clickBar(){
 	  			this.status.histogramShow = true
 	  		},
-	  		clickLine(){
+	  		/**
+	  		 * [clickPie 显示饼装图]
+	  		 */
+	  		clickPie(){
 	  			this.status.histogramShow = false
 	  		}
 	  	},
+		created(){
+			this.form.filterData = store.state.echart.cusFilterData
+			this.status.histogramShow = store.state.echart.cusStatus.histogramShow
+			this.getDataRows(this.form.filterData)
+	  	},
 	  	computed:{
+	  		/**
+	  		 * [viewOptions 获取图表过滤Popup-Picker的值]
+	  		 */
+	  		viewOptions(){
+	  			return options.customerEchart
+	  		},
+	  		/**
+	  		 * [changeFilterData 暴露vuex中状态]
+	  		 * @return {[type]} [vuex中cusFilterData状态]
+	  		 */
 	  		changeFilterData(){
 	  			return store.state.echart.cusFilterData
 	  		}
 	  	},
+	  	/**
+	  	 * [watch 监听暴露的vuex中的状态值]
+	  	 */
 		watch:{
 	  		'changeFilterData':{
 	  			handler:function(newV,oldV){

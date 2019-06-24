@@ -87,7 +87,7 @@
 		</popup>
 		<!--提示信息-->
 		<toast v-model="toastConfig.show" :type="toastConfig.type">{{ toastConfig.text }}</toast>
-		<loading :show="load.show" text="加载中"></loading>
+		<loading :show="load.show" :text="load.text"></loading>
 	</div>
 </template>
 <script>
@@ -135,11 +135,20 @@
 					text:''
 				},
 				load:{
-					show:false
+					show:false,
+					text:'加载中'
 				}
 			}
 		},
 		methods:{
+			/**
+			 * [logout 退出登录]
+			 */
+			logout(){
+				this.$router.push( '/login' )
+				store.commit('userLogin',[])
+				store.commit('setLoginStatus',null)
+			},
 			/**
 			 * [search 设置搜索类型并获取数据]
 			 */
@@ -189,7 +198,7 @@
 							this.$refs.homeScroller.reset({top:0})
 						}, 10)
 					})
-				},3000)
+				},1000)
 				this.status.onBottom = false
 			},
 			/**
@@ -204,7 +213,7 @@
 					setTimeout(() => {
 						 this.$refs.homeScroller.donePullup()
 					},10)
-				},3000)
+				},1000)
 			},
 			/**
 			 * [getCreateData 根据vuex状态中的参数获取对应的数据]
@@ -251,11 +260,14 @@
 				if(this.filterData.cusName){
 					this.timer = setTimeout(()=>{
 						this.getCusName()
-					},3000)
+					},1000)
 				}else{
 					this.getCusName()
 				}
 			},
+			/**
+			 * [getCusName 客户名称模糊查询]
+			 */
 			getCusName(){
 				if( !this.filterData.cusName && sessionStorage.getItem('cusNameSearchList') ){
 					this.popupData.results = JSON.parse(sessionStorage.getItem('cusNameSearchList'))
@@ -289,24 +301,49 @@
 				store.commit('setFilterData',this.filterData)
 			},
 			/**
-			 * [根据状态码获取对应中文名称]
+			 * [statusDemandType 根据状态码获取对应中文名称]
 			 * @param  {[string]} val [状态码]
 			 */
 			statusDemandType(val){
 				return formatter.statusDemandType(val)
 			},
+			/**
+			 * [statusPriorityLevel 获取优先级状态码对应中文]
+			 * @param  {[string]} val [优先级状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusPriorityLevel(val){
 				return formatter.statusPriorityLevel(val)
 			},
+			/**
+			 * [statusIsMajorMod 获取重大状态码对应中文]
+			 * @param  {[string]} val [重大状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusIsMajorMod(val){
 				return formatter.statusIsMajorMod(val)
 			},
+			/**
+			 * [statusComplete 获取完成状态码对应中文]
+			 * @param  {[string]} val [完成状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusComplete(val){
 				return formatter.statusComplete(val)
 			},
+			/**
+			 * [statusPassTest 获取测试状态码对应中文]
+			 * @param  {[string]} val [测试状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusPassTest(val){
 				return formatter.statusPassTest(val)
 			},
+			/**
+			 * [statusDemand 获取需求状态码对应中文]
+			 * @param  {[string]} val [需求状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusDemand(val){
 				return formatter.statusDemand(val)
 			},
@@ -319,6 +356,10 @@
 				this.toastConfig.text = tipText
 				this.toastConfig.show = true
 			},
+			/**
+			 * [pushUrl 页面底部跳转页面]
+			 * @param  {[string]} url [目标路径]
+			 */
 			pushUrl(url){
 				this.$router.push(url)
 			}
@@ -328,7 +369,7 @@
 				this.$refs.homeScroller.reset()
 			})
 			let width = window.innerWidth * 0.75
-			this.popupWidth = "width : " + width + 'px'
+			this.popupWidth = "width : " + width + 'px' //定义弹出层的宽度
 		},
 		created(){
 			this.load.show = true
@@ -336,21 +377,41 @@
 			this.getCreateData()
 		},
 		computed:{
+			/**
+			 * [demandStatus 弹出层需求状态CheckList的值]
+			 * @return {[type]} [description]
+			 */
 	  		demandStatus(){
 	  			return options.demandStatusList
 	  		},
+	  		/**
+	  		 * [demandType 弹出层需求类型CheckList的值]
+	  		 * @return {[type]} [description]
+	  		 */
 	  		demandType(){
 	  			return options.demandTypeList
 	  		},
+	  		/**
+	  		 * [isMajor 弹出层是否重大Radio的值]
+	  		 * @return {Boolean} [description]
+	  		 */
 	  		isMajor(){
 	  			return options.isMajorList
 	  		},
+	  		/**
+	  		 * [priorityLevelList 弹出层优先级CheckList的值]
+	  		 * @return {[type]} [description]
+	  		 */
 	  		priorityLevelList(){
-	  			return options.analystsPriorityLevelList
+	  			return options.priorityLevelList
 	  		},
+	  		/**
+	  		 * [keyType 主页搜索类型的Picker值]
+	  		 * @return {[type]} [description]
+	  		 */
 	  		keyType(){
 	  			return options.keyTypeList
-	  		},
+	  		}
 	  	}
 
 	}

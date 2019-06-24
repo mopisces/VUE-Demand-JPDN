@@ -33,6 +33,10 @@
 			}
 		},
 		methods:{
+			/**
+			 * [onItemClick 点击tab-item时触发]
+			 * @param  {[number]} index [对应组件的索引]
+			 */
 			onItemClick(index){
 				switch(index){
 					case 0:
@@ -43,6 +47,9 @@
 					break
 				}
 			},
+			/**
+			 * [getCreateData 根据vuex中的状态定义初始值]
+			 */
 			getCreateData(){
 				if(store.state.echart.dataViewStatus.tabViewIndex == '0'){
 					this.tabList = [{title:'按客户汇总数据',selected:true},{title:'按时间汇总数据',selected:false}]
@@ -56,7 +63,7 @@
 		},
 		created(){
 			this.getCreateData()
-			store.commit('setTitle','需求数据汇总')
+			store.commit('setTitle','需求数据汇总') //修改vuex中标题值
 		}
 	}
 </script>

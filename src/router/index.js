@@ -13,8 +13,8 @@ const newTest = r => require.ensure([], () => r(require('@/components/page/TestL
 const testDetail = r => require.ensure([], () => r(require('@/components/page/TestDetail')), 'testDetail')
 const newEchart = r => require.ensure([], () => r(require('@/components/page/DataView')), 'newEchart')
 const echartDetail = r => require.ensure([], () => r(require('@/components/page/ViewDetail')), 'echartDetail')
-
 const home = r => require.ensure([], () => r(require('@/components/page/Home')), 'home')
+
 //公共页面
 const login = r => require.ensure([], () => r(require('@/components/common/Login')), 'login')
 const failure = r => require.ensure([], () => r(require('@/components/common/404')), 'failure')

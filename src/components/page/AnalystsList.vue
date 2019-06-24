@@ -62,12 +62,18 @@
 			}
 		},
 		methods:{
-			/*跳转至具体页面*/
+			/**
+			 * [jumpUrl 跳转至具体页面]
+			 * @param  {[number]} id    [点击对应需求的ID]
+			 * @param  {[number]} index [点击对应需求在数组中的索引值]
+			 */
 			jumpUrl (id , index) {
 				store.commit('setAnalysts', {id:id,deleteIndex:index} )
 				this.$router.push('/common/adetail')
 			},
-			/*获取列表*/
+			/**
+			 * [getCreateData 获取待分析列表]
+			 */
 			getCreateData(){
 				this.$api.analystsRequest.analystsList().then((res)=>{
 					if( res.data.code == 200){
@@ -81,11 +87,15 @@
 				})
 				this.load.show = false
 			},
-			/*数据获取失败后跳转*/
+			/**
+			 * [hideToast 数据获取失败后跳转]
+			 */
 			hideToast(){
 				this.$router.push('/common/operate')
 			},
-			/*下拉刷新数据*/
+			/**
+			 * [pullDownRefresh 下拉刷新数据]
+			 */
 			pullDownRefresh(){
 				this.load.show = true
 				setTimeout(()=>{
@@ -95,13 +105,12 @@
 							this.$refs.AScroller.donePulldown()
 						}, 10)
 					})
-				},3000)
+				},1000)
     		}
 		},
 		created(){
-			//生产环境时开启
 			this.load.show = true
-			store.commit('setTitle','分析列表')
+			store.commit('setTitle','分析列表') //修改vuex中标题值
 			this.getCreateData()
 		},
 		mounted(){

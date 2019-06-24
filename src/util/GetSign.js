@@ -3,6 +3,9 @@ import store from '@/store/store'
 import md5 from 'js-md5'
 
 export default {
+	/**
+	 * [sortByKey 生成sign签名]
+	 */
 	sortByKey(obj){
 		obj['nonce'] = Math.ceil(Math.random()*10)
 		obj['timestamp'] = parseInt((new Date().getTime())/ 1000)
@@ -14,8 +17,6 @@ export default {
 		}
 		str += 'key=' + store.state.appsercet
 		obj['sign'] = md5(str).toLowerCase()
-		//console.dir(obj)
-		//console.dir(obj.sign)
 		return obj
 	}
 }

@@ -69,11 +69,10 @@
       			}
 			}
 		},
-		created(){
-			store.commit('setTitle','修改需求')
-			this.setCreateData()
-		},
 		methods:{
+			/**
+			 * [setCreateData 创建页面时填充数据]
+			 */
 			setCreateData(){
 				if( typeof(store.state.modifyDetail.jumpDetail.id) != 'string' ){
 					this.setToast('非法路由访问')
@@ -85,6 +84,9 @@
 				Object.assign(this.modDetail,list[index])
 				this.form.demand_instru = this.modDetail.demand_instru
 			},
+			/**
+			 * [showConfirm 检查数据完整并弹出确认框]
+			 */
 			showConfirm(){
 				if( this.form.mod_instru === ''){
 					this.setToast('请填写修改说明')
@@ -92,6 +94,9 @@
 				}
 				this.status.showConfirm = true
 			},
+			/**
+			 * [onConfirm 保存数据]
+			 */
 			onConfirm(){
 				let self = this
 				this.$api.modRequest.saveMod(this.form).then((res)=>{
@@ -109,11 +114,20 @@
 					}
 				})
 			},
+			/**
+			 * [setToast 设置Toast]
+			 * @param {[string]} text [Toast提示文字]
+			 * @param {String} type [Toast类型]
+			 */
 			setToast( text, type='warn' ){
 				this.returnMsg.type = type
 				this.returnMsg.text = text
 				this.returnMsg.show = true
 			}
+		},
+		created(){
+			store.commit('setTitle','修改需求') //修改vuex中标题值
+			this.setCreateData()
 		},
 	  	computed:{
 	  		completeStateList(){

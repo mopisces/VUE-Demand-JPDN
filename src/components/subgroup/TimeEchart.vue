@@ -2,7 +2,7 @@
 	<scroller height="-140px" lock-x>
 		<div>
 			<group>
-				<popup-picker :columns="1" :data="viewData.options" v-model="form.filterData" title="筛选条件" @on-change="filterChange" :show-name="status.showName" popup-title="筛选条件" ></popup-picker>
+				<popup-picker :columns="1" :data="viewOptions" v-model="form.filterData" title="筛选条件" @on-change="filterChange" :show-name="status.showName" popup-title="筛选条件" ></popup-picker>
 				<button-tab >
 					<button-tab-item @on-item-click="clickBar" :selected="status.histogramShow">柱状图</button-tab-item>
 					<button-tab-item @on-item-click="clickLine" :selected="! status.histogramShow">折线图</button-tab-item>
@@ -34,6 +34,9 @@
 		},
 		data () {
 			let self = this
+			/**
+			 * [chartEvents 点击图表时触发/修改vuex中的状态]
+			 */
 			this.chartEvents={
 				click:function(e){
 					let time = parseInt(e.name).toString()
@@ -77,22 +80,21 @@
 			  	title:''
 			}
 	  	},
-		created(){
-			this.form.filterData = store.state.echart.timeFilterData
-			this.status.histogramShow = store.state.echart.timeStatus.histogramShow
-			this.createViewOptions()
-			this.getDataRows(this.form.filterData)
-	  	},
 	  	methods:{
+	  		/**
+	  		 * [filterChange popup-picker变化时触发/修改vuex中的状态值]
+	  		 * @param  {[array]} val [过滤状态码]
+	  		 */
 	  		filterChange(val){
 	  			if( this.form.filterData.join('*') == store.state.echart.timeFilterData.join('*') ){
 	  				return 
 	  			}
 	  			store.commit('setEchartTime',val)
 	  		},
-	  		createViewOptions(){
-	  			this.viewData.options = options.timeEchart
-	  		},
+	  		/**
+	  		 * [getDataRows 获取图表数据/并设置标题]
+	  		 * @param  {[array]} data [图表状态]
+	  		 */
 	  		getDataRows( data ){
 	  			if(store.state.echart.timeChartRows.length != '0'){
 	  				this.chartData.rows = store.state.echart.timeChartRows
@@ -106,18 +108,43 @@
 	  			})
 	  			this.title = store.state.echart.timeFilterData[0] + '年需求总览'
 	  		},
+	  		/**
+	  		 * [clickBar 显示柱状图]
+	  		 */
 	  		clickBar(){
 	  			this.status.histogramShow = true
 	  		},
+	  		/**
+	  		 * [clickLine 显示饼状图]
+	  		 */
 	  		clickLine(){
 	  			this.status.histogramShow = false
 	  		}
 	  	},
+	  	created(){
+			this.form.filterData = store.state.echart.timeFilterData
+			this.status.histogramShow = store.state.echart.timeStatus.histogramShow
+			this.getDataRows(this.form.filterData)
+	  	},
 	  	computed:{
+	  		/**
+			* [changeFilterData 暴露vuex中状态]
+			* @return {[type]} [vuex中timeFilterData状态]
+			*/
 	  		changeFilterData(){
 	  			return store.state.echart.timeFilterData
+	  		},
+	  		/**
+	  		 * [viewOptions 获取图表过滤Popup-Picker的值]
+	  		 * @return {[type]} [description]
+	  		 */
+	  		viewOptions(){
+	  			return options.timeEchart
 	  		}
 	  	},
+	  	/**
+	  	 * [watch 监听暴露的vuex中的状态值]
+	  	 */
 		watch:{
 	  		'changeFilterData':{
 	  			handler:function(newV,oldV){

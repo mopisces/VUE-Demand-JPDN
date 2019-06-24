@@ -16,6 +16,9 @@ export default {
 		XButton
 	},
 	methods: {
+        /**
+         * [goBack 跳转去登录页面]
+         */
 		goBack(){
 			this.$router.push('/login')
 		}

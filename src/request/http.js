@@ -99,11 +99,16 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
 	res =>{
+		//console.dir('resd')
+		///console.dir(res)
+		//errorHandle(res.data.code)
+		//errorHandle(res)
         return res.status === 200 ? Promise.resolve(res) : Promise.reject(res)
     }, 
 	error => {
 		const { response } = error;
 		if (response) {
+			console.dir(response)
 			errorHandle(response.status, response.data)
 			return Promise.reject()
 		}

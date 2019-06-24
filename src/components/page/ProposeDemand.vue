@@ -93,11 +93,11 @@
 				}
 			}
 	    },
-	    created(){
-	    	store.commit('setTitle','提出需求')
-			this.getCreateData()
-	    },
+	   
 	    methods:{
+	    	/**
+	    	 * [searchChange 对输入值模糊查询]
+	    	 */
 	    	searchChange(){
 	    		if(this.timer){
 					clearTimeout(this.timer)
@@ -110,14 +110,15 @@
 					this.getCusName()
 				}
 	    	},
+	    	/**
+	    	 * [searchCancel 搜索框点击取消触发]
+	    	 */
 	    	searchCancel(){
 	    		console.dir('cancel')
 	    	},
-	    	onChange(value){
-	    		this.form.customer_id = value
-	    		this.cusName = this.$refs.cusNamePicker.getNameValues()
-	    	},
-	    	/*获取表格内容*/
+	    	/**
+	    	 * [getCreateData 获取提出需求初始内容]
+	    	 */
 			getCreateData(){
 				this.$api.demandRequest.getDemandID().then((res)=>{
 					if( res.data.code == 200 ){
@@ -133,23 +134,14 @@
 					this.tableInfo.contactPhone = store.state.userInfo.client.contact_tel_no
 				}else{
 					this.status.staffShow = true
-					/*if( store.state.customerList.length != 0 ){
-						this.customerList = store.state.customerList
-						this.cusName = this.customerList[0][0].name
-						return 
-					}else{
-						this.$api.demandRequest.getCustomerList().then((res)=>{
-							if(res.data.code == 200){
-								this.customerList = res.data.list
-								this.cusName = this.customerList[0][0].name
-								store.commit('setCustomerList',res.data.list)
-							}
-						})
-					}*/
 					this.getCusName()
 				}
 
 			},
+			/**
+			 * [getCusName 获取客户名称并组成Picker所需数据格式]
+			 * @return {[array]} [Picker所需数据格式]
+			 */
 			getCusName(){
 				let data = []
 				if( this.searchName == ''  &&  sessionStorage.getItem('cusNameSearchList') ){
@@ -181,7 +173,9 @@
 				}
 				
 			},
-			/*提交数据*/
+			/**
+			 * [onConfirm 提交数据]
+			 */
 			onConfirm () {
 				this.confirm = false
 				let self = this
@@ -196,7 +190,9 @@
 					}
 				})
 			},
-			/*确认提交提示框之前检查数据完整性*/
+			/**
+			 * [showConfirm 确认提交提示框之前检查数据完整性]
+			 */
 			showConfirm () {
 				if(this.form.demand_instru.trim() == ''){
 					this.setToast('请输入需求内容')
@@ -208,13 +204,33 @@
 				}
 				this.status.confirm = true
 			},
+			/**
+		     * [setToast 设置弹出的Toast]
+		     * @param {[string]} text [Toast提示信息]
+		     * @param {String} type [Toast类型]
+		     */
 			setToast( text, type='warn' ){
 				this.returnMsg.type = type
 				this.returnMsg.text = text
 				this.returnMsg.show = true
 			}
 		},
+		created(){
+	    	store.commit('setTitle','提出需求') //修改vuex中标题值
+			this.getCreateData()
+	    },
+		/**
+		 * [computed 获取vuex中用户的姓名]
+		 */
+		computed:{
+			setName(){
+				return store.state.userInfo.client.name
+			}
+		},
 		watch:{
+			/**
+			 * 监听form中customer_id值变化
+			 */
 			'form.customer_id':{
 				handler:function(newV,oldV){
 					setTimeout(() => {
@@ -223,12 +239,8 @@
 				},
 				deep:true
 			}
-		},
-		computed:{
-			setName(){
-				return store.state.userInfo.client.name
-			}
 		}
+		
 	}
 </script>
 

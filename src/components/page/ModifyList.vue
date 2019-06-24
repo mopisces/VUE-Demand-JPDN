@@ -67,19 +67,41 @@
 			}
 		},
 		methods:{
+			/**
+			 * [根据状态码获取对应中文名称]
+			 * @param  {[string]} val [状态码]
+			 */
 			statusDemandType(val){
 				return formatter.statusDemandType(val)
 			},
+			/**
+			 * [statusPriorityLevel 获取优先级状态码对应中文]
+			 * @param  {[string]} val [优先级状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusPriorityLevel(val){
 				return formatter.statusPriorityLevel(val)
 			},
+			/**
+			 * [statusIsMajorMod 获取重大状态码对应中文]
+			 * @param  {[string]} val [重大状态码]
+			 * @return {[string]}     [对应中文]
+			 */
 			statusIsMajorMod(val){
 				return formatter.statusIsMajorMod(val)
 			},
+			/**
+			 * [jumpUrl 跳转至具体页面]
+			 * @param  {[number]} id    [点击对应需求的ID]
+			 * @param  {[number]} index [点击对应需求在数组中的索引值]
+			 */
 			jumpUrl(id,index){
 				store.commit('setMod',{id:id,deleteIndex:index})
 				this.$router.push('/common/mdetail')
 			},
+			/**
+			 * [getCreateData 获取待修改列表]
+			 */
 			getCreateData(){
 				this.$api.modRequest.modList().then((res)=>{
 					if( res.data.code == 200){
@@ -92,9 +114,15 @@
 				})
 				this.load.show = false
 			},
+			/**
+			 * [hideToast 数据获取失败后跳转]
+			 */
 			hideToast(){
 				this.$router.push('/common/operate')
 			},
+			/**
+			 * [pullDownRefresh 下拉刷新数据]
+			 */
 			pullDownRefresh(){
 				this.load.show = true
 				setTimeout(()=>{
@@ -104,12 +132,12 @@
 							this.$refs.modScroller.donePulldown()
 						}, 10)
 					})
-				},3000)
+				},1000)
 			}
 		},
 		created(){
 			this.load.show = true
-			store.commit('setTitle','修改列表')
+			store.commit('setTitle','修改列表') //修改vuex中标题值
 			this.getCreateData()
 		},
 		mounted(){
